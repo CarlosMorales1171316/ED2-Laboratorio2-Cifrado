@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ZigZag">
+
+    <EditText
+        android:id="@+id/Texto_Cifrar"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:hint="Ingrese el mensaje que desea cifrar"
+         />
+    <EditText
+        android:id="@+id/Texto_Grado"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:inputType="number"
+        android:hint="Ingrese grado de Zig Zag"
+        />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+    <Button
+        android:id="@+id/Boton_Ruta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:text="Escoja ruta de almacenamiento de archivo"
+        android:layout_alignParentLeft="true" />
+    <TextView
+    android:layout_width="5dp"
+    android:layout_height="5dp" />
+
+    <Button
+        android:id="@+id/Boton_Cifrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Cifrar  texto" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/Boton_CifrarTexto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Cifrar archivo de texto" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/Boton_DescifrarTexto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Descifrar archivo cif" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+    <TextView
+        android:id="@+id/TextView_MostrarCifrado"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_below="@+id/Boton_OpenFile"
+        android:layout_centerHorizontal="true"
+        android:background="#5c808d"
+        android:padding="10dp" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+    <TextView
+        android:id="@+id/MostrarRuta"
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        android:layout_centerHorizontal="true"
+        android:background="#003366"
+        android:padding="10dp"
+        android:textColor="@android:color/background_dark"
+        android:textSize="10dp" />
+
+</LinearLayout>
