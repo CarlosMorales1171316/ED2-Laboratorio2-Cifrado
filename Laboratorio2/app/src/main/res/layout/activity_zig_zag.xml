@@ -79,10 +79,10 @@
     <TextView
         android:id="@+id/TextView_MostrarCifrado"
         android:layout_width="match_parent"
-        android:layout_height="74dp"
+        android:layout_height="98dp"
         android:layout_below="@+id/Boton_OpenFile"
         android:layout_centerHorizontal="true"
-        android:background="#5c808d"
+        android:background="#66FFCC"
         android:padding="10dp" />
     <TextView
         android:layout_width="5dp"
@@ -91,9 +91,9 @@
     <TextView
         android:id="@+id/MostrarRuta"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
+        android:layout_height="90dp"
         android:layout_centerHorizontal="true"
-        android:background="#003366"
+        android:background="#0066FF"
         android:padding="10dp"
         android:textColor="@android:color/background_dark"
         android:textSize="10dp" />
