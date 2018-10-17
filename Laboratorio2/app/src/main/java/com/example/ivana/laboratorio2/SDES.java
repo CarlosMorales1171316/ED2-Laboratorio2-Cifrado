@@ -130,18 +130,8 @@ public class SDES extends AppCompatActivity {
                     {
                         int K = Integer.parseInt(Llave.getText().toString());
                         AlgortimoSDES sdes = new AlgortimoSDES(K);
-                        int m = Integer.parseInt(Leer("/storage/emulated/0/" + path));
-                        sdes.pasos0= "Key K1: "+sdes.ImprimirInformacion( sdes.K1, 8);
-                        sdes.pasos0=sdes.pasos0+("\nKey K2: "+sdes.ImprimirInformacion( sdes.K2, 8));
-                        m = sdes.cifrar( m);
-                        int Cifrado =Integer.parseInt(sdes.ImprimirInformacion( m, 8));
-                        sdes.pasos0=sdes.pasos0+("\nEncrypted Message: "+Cifrado);
-                        String rutaSalida = ruta +name2+".scif";
-                        sdes.CrearArchivo(rutaSalida,Cifrado+"");
-                        MostrarPasos.setText(sdes.pasos0);
-                        MostrarRuta.setText(rutaSalida);
-                    }
 
+                        }
                     if(Llave.getText().toString().length()==0)
                     {
                         MostrarPasos.setText("Debe de ingresar una llave");
@@ -158,7 +148,6 @@ public class SDES extends AppCompatActivity {
                 //region Descifrar
                 if(opcion ==2)
                 {
-
                 }
                 // endregion
             }

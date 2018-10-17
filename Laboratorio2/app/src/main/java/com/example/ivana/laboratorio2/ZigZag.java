@@ -268,7 +268,6 @@ public class ZigZag extends AppCompatActivity {
                         }
                     }
                     //endregion
-
                 }
             }
     }
@@ -289,6 +288,7 @@ public class ZigZag extends AppCompatActivity {
         }
         return text.toString();
     }
+
     public String Leer(String archivo)
     {
         String textoArchivo = "";
