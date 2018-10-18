@@ -46,6 +46,8 @@ public class SDES extends AppCompatActivity {
         MostrarRuta = (TextView) findViewById(R.id.MostrarRutaSDES);
         MostrarPasos=(TextView) findViewById(R.id.TextView_MostrarCifradoSDES);
         Llave =(EditText) findViewById(R.id.Texto_Key);
+        CheckPermission();
+        CheckPermission2();
 
         Ruta.setOnClickListener(new View.OnClickListener()
         {
