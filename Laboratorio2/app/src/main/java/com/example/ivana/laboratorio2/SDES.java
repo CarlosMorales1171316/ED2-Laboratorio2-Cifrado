@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class SDES extends AppCompatActivity {
 
@@ -182,11 +183,23 @@ public class SDES extends AppCompatActivity {
                     String ruta = s.Leer();
                     String name= ("/storage/emulated/0/"+path);
                     String[] d = name.split("/");
-                    String name2 = d[5].substring(0,d[5].length()-4);
+                    String name2 = d[d.length-1].substring(0,d[5].length()-4);
+                    String[] SPLIT = name2.split("\\.");
                     String mensaje = Leer("/storage/emulated/0/" + path);
                     boolean condicion = s.ValidarKey(Llave.getText().toString());
                     if(Llave.getText().toString().length()==10&&ruta.length()>0&&mensaje.length()>0&&condicion==false)
                     {
+
+                        int K = Integer.parseInt(Llave.getText().toString());
+                        AlgortimoSDES sdes = new AlgortimoSDES(K);
+                        ArrayList<String> Cifrado = new ArrayList<>();
+                        Cifrado = sdes.LeerCifrado(new File("/storage/emulated/0/" + path));
+                        String[] Descifrado = new String[3];
+                        Descifrado =sdes.DescifrarMensaje(K, Cifrado.get(Cifrado.size()-1));
+                        MostrarPasos.setText(Descifrado[0]+"\nMensaje descifrado: "+ Descifrado[1]);
+                        String rutaSalida = ruta +SPLIT[0]+".txt";
+                        sdes.CrearArchivo2(rutaSalida,Descifrado[1]);
+                        MostrarRuta.setText(rutaSalida);
 
                     }
 

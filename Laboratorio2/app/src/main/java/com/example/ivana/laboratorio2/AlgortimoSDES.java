@@ -272,6 +272,43 @@ public class AlgortimoSDES
         }
         return condicion;
     }
+    public  ArrayList<String> LeerCifrado(File archivo){
 
+        ArrayList<String> temp = new ArrayList<String>();
+        try
+        {
+            String cadenaArchivo;
+            FileReader filereader = new FileReader(archivo);
+            BufferedReader bufferedreader = new BufferedReader(filereader);
+            while((cadenaArchivo = bufferedreader.readLine())!=null) {
+                temp.add(cadenaArchivo);
+            }
+            bufferedreader.close();
+
+        }catch(Exception e){
+
+        }
+        return temp;
+    }
+
+    public void CrearArchivo2(String ruta,String mensaje)
+    {
+        try
+        {
+
+            new File(ruta).createNewFile();
+
+            FileWriter fw = new FileWriter(ruta);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(mensaje);
+            bw.close();
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 }
