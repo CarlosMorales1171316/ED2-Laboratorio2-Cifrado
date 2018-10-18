@@ -220,7 +220,6 @@ public class ZigZag extends AppCompatActivity {
                     {
                         MostrarCifrado.setText("Debe de escribir un mensaje a cifrar");
                     }
-
                 }
 
                     //endregion

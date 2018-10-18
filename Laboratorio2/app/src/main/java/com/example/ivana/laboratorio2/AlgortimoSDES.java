@@ -212,4 +212,66 @@ public class AlgortimoSDES
         mensaje[1]=mensaje0;
         return mensaje;
     }
+    public void CrearArchivo(String ruta,String mensaje1,String mensaje2)
+    {
+        try
+        {
+
+            new File(ruta).createNewFile();
+
+            FileWriter fw = new FileWriter(ruta);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("");
+            bw.close();
+            BufferedWriter out  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(ruta),true),"UTF8"));
+            out.write(mensaje1+System.getProperty("line.separator"));
+            out.write(mensaje2);
+            out.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    public String Leer()
+    {
+        String mensaje="";
+        String ruta ="/storage/emulated/0/Download/RutaArchivo.txt";
+        try
+        {
+            if (new File(ruta).exists())
+            {
+                FileReader fr=new FileReader(ruta);
+                BufferedReader br = new BufferedReader(fr);
+                String s;
+                while((s = br.readLine()) != null) {
+                    mensaje=(s);
+                }
+                fr.close();
+            }
+
+        }
+        catch (IOException e)
+        {
+
+        }
+
+        return mensaje;
+    }
+    public boolean ValidarKey(String key)
+    {
+        boolean condicion =false;
+
+        for (int i = 0; i < key.length(); i++)
+        {
+            String tempo =key.charAt(i)+"";
+            if(!tempo.equals("0")&& !tempo.equals("1"))
+            {
+                condicion =true;
+            }
+        }
+        return condicion;
+    }
+
+
 }

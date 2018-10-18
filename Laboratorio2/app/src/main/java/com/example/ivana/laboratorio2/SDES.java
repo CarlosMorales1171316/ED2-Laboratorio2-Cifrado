@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class SDES extends AppCompatActivity {
 
@@ -119,27 +120,56 @@ public class SDES extends AppCompatActivity {
                 //region Cifrar
                 if(opcion ==1)
                 {
-
                     AlgortimoSDES s = new AlgortimoSDES(1);
+                    String ruta = s.Leer();
                     String name= ("/storage/emulated/0/"+path);
                     String[] d = name.split("/");
                     String name2 = d[5].substring(0,d[5].length()-4);
-                    String ruta = s.Leer();
+                    String mensaje = Leer("/storage/emulated/0/" + path);
+                    boolean condicion = s.ValidarKey(Llave.getText().toString());
 
-                    if(Llave.getText().toString().length()>0&&ruta.length()>0)
+                    if(Llave.getText().toString().length()==10&&ruta.length()>0&&mensaje.length()>0&&condicion==false)
                     {
+                        try
+                        {
                         int K = Integer.parseInt(Llave.getText().toString());
                         AlgortimoSDES sdes = new AlgortimoSDES(K);
-
+                        String[] cifrado = new String[3];
+                        cifrado =sdes.CifrarMensaje(K, mensaje);
+                        MostrarPasos.setText("Mensaje original: "+mensaje+"\nPasos Cifrado: \n"+cifrado[2]+"\nMensaje Cifrado: "+ cifrado[0]);
+                        String rutaSalida = ruta +name2+".scif";
+                        sdes.CrearArchivo(rutaSalida,cifrado[0],cifrado[1]);
+                        MostrarRuta.setText(rutaSalida);
                         }
+                        catch (UnsupportedEncodingException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
                     if(Llave.getText().toString().length()==0)
                     {
                         MostrarPasos.setText("Debe de ingresar una llave");
                     }
 
-                    if(ruta.length()>0)
+                    if(ruta.length()==0)
                     {
                         MostrarPasos.setText("Necesita una ruta de almacenamiento para guardar sus archivos");
+                    }
+                    if(Llave.getText().toString().length()> 0&&Llave.getText().toString().length()<10)
+                    {
+                        MostrarPasos.setText("La llave ingresada de "+ Llave.getText().toString().length()+"bits, ingrese una llave nuevamente de 10 bits.");
+                        Llave.setText("");
+                    }
+                    if(Llave.getText().toString().length()>10)
+                    {
+                        MostrarPasos.setText("Llave demasiado grande, ingrese una nuevamente");
+                        Llave.setText("");
+                    }
+                    if(condicion == true)
+                    {
+                        MostrarPasos.setText("La llave solo debe de contener 0 y 1");
+                        Llave.setText("");
                     }
 
                 }
@@ -148,6 +178,42 @@ public class SDES extends AppCompatActivity {
                 //region Descifrar
                 if(opcion ==2)
                 {
+                    AlgortimoSDES s = new AlgortimoSDES(1);
+                    String ruta = s.Leer();
+                    String name= ("/storage/emulated/0/"+path);
+                    String[] d = name.split("/");
+                    String name2 = d[5].substring(0,d[5].length()-4);
+                    String mensaje = Leer("/storage/emulated/0/" + path);
+                    boolean condicion = s.ValidarKey(Llave.getText().toString());
+                    if(Llave.getText().toString().length()==10&&ruta.length()>0&&mensaje.length()>0&&condicion==false)
+                    {
+
+                    }
+
+                    if(Llave.getText().toString().length()==0)
+                    {
+                        MostrarPasos.setText("Debe de ingresar una llave");
+                    }
+
+                    if(ruta.length()==0)
+                    {
+                        MostrarPasos.setText("Necesita una ruta de almacenamiento para guardar sus archivos");
+                    }
+                    if(Llave.getText().toString().length()> 0&&Llave.getText().toString().length()<10)
+                    {
+                        MostrarPasos.setText("La llave ingresada de "+ Llave.getText().toString().length()+"bits, ingrese una llave nuevamente de 10 bits.");
+                        Llave.setText("");
+                    }
+                    if(Llave.getText().toString().length()>10)
+                    {
+                        MostrarPasos.setText("Llave demasiado grande, ingrese una nuevamente");
+                        Llave.setText("");
+                    }
+                    if(condicion == true)
+                    {
+                        MostrarPasos.setText("La llave solo debe de contener 0 y 1");
+                        Llave.setText("");
+                    }
                 }
                 // endregion
             }
@@ -184,7 +250,7 @@ public class SDES extends AppCompatActivity {
         }
         return text.toString();
     }
-    public String Leer(String archivo)
+    public static String Leer(String archivo)
     {
         String textoArchivo = "";
         try

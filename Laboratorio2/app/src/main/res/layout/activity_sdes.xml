@@ -53,7 +53,7 @@
     <TextView
         android:id="@+id/TextView_MostrarCifradoSDES"
         android:layout_width="match_parent"
-        android:layout_height="215dp"
+        android:layout_height="229dp"
         android:layout_below="@+id/Boton_OpenFile"
         android:layout_centerHorizontal="true"
         android:background="#00ccb8"
