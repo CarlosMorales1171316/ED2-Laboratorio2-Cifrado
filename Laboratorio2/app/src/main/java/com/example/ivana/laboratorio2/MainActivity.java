@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.serie3) {
-            Intent intent = new Intent(MainActivity.this, RSA.class);
+            Intent intent = new Intent(MainActivity.this, RSALlavesVista.class);
             startActivity(intent);
         }
 
