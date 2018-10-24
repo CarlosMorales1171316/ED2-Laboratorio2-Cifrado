@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Laboratorio # 2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Integrantes</string>
+    <string name="nav_header_subtitle">Ivan Arango - 1158116,
+        Carlos Morales - 1171316</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+</resources>

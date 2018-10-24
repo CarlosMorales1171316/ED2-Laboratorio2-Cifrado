@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/serie1"
+            android:icon="@drawable/ic_no_encryption_black_24dp"
+            android:title="Cifrado Zig Zag" />
+        <item
+            android:id="@+id/serie2"
+            android:icon="@drawable/ic_visibility_off_black_24dp"
+            android:title="Cifrado S-DES" />
+        <item
+            android:id="@+id/serie3"
+            android:icon="@drawable/ic_security_black_24dp"
+            android:title="Cifrado RSA" />
+    </group>
+
+</menu>
