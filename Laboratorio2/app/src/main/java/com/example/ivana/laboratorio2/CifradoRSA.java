@@ -1,92 +1,118 @@
 package com.example.ivana.laboratorio2;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
 
-public class CifradoRSA {
-    private BigInteger valorN;
-    private BigInteger valorE;
-    private List<Integer> mensaje;
-    private BigInteger valorP;
-    private BigInteger valorQ;
-    private BigInteger valorR;
-    private BigInteger valorD;
-    private String MensajeCifrado;
-    private RSA rsa = new RSA();
-
-
-    public CifradoRSA(BigInteger valorN, BigInteger valorE, String mensaje) {
-        this.valorN = valorN;
-        this.valorE = valorE;
-        this.mensaje = convertirASCII(mensaje);
-    }
-
-    private List<Integer> convertirASCII(String mensaje) {
-        List<Integer> ascii = new ArrayList<>();
-        for (char ch : mensaje.toCharArray()) {
-            ascii.add((int) ch);
-        }
-        return ascii;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-
-    public String[] cifrar()
+public class CifradoRSA
+{
+    public String CifrarMensaje(String llave,String mensaje)
     {
-        calcularQ();
-        calcularR();
-        calcularD();
-        ConstruirMensajeCifrado();
-        String[] imprimir = Imprimir();
-        return imprimir;
-    }
+        String cifrado ="";
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void ConstruirMensajeCifrado()
-    {
-        StringJoiner joiner = new StringJoiner(",");
-        for (int ch : mensaje) {
-            BigInteger chh = BigInteger.valueOf(ch);
-            String cifrado = chh.pow(valorE.intValue()).mod(valorN).toString();
-            joiner.add(cifrado);
+        String[] LlavePublica =LlavePublica(llave);
+
+        ArrayList<String> caracteres = Caracteres(mensaje);
+        ArrayList<String> ascii = ConvertirAscii(caracteres);
+
+        for(int i =0;i<ascii.size();i++)
+        {
+            BigInteger n, e, N,potencia;
+
+            n = new BigInteger(LlavePublica[0]);
+            e = new BigInteger(LlavePublica[1]);
+            N = new BigInteger(ascii.get(i));
+            potencia = N.modPow(e, n);
+
+            if(i+1!=ascii.size())
+            {
+                cifrado +=potencia+",";
+            }
+            if(i+1==ascii.size())
+            {
+                cifrado +=potencia;
+            }
         }
-        MensajeCifrado = joiner.toString();
+
+
+        return cifrado;
     }
 
-    private void calcularR() {
-        valorR = (valorP.subtract(BigInteger.ONE)).multiply(valorQ.subtract(BigInteger.ONE));
+    public ArrayList<String> Caracteres(String mensaje)
+    {
+        ArrayList<String> nuevo = new ArrayList<String>();
+        for (int i = 0; i < mensaje.length(); i++)
+        {
+            nuevo.add(mensaje.charAt(i)+"");
+        }
+        return nuevo;
     }
 
-    private String[] Imprimir() {
-        String[]Imprimir=new String[3];
-        Imprimir[0] = ("" +
-                "\nn es: " + valorN +
-                "\ne es: " + valorE +
-                "\np es: " + valorP +
-                "\nq es: " + valorQ +
-                "\nd es: " + valorD +
-                "\nMensaje cifrado: " + MensajeCifrado);
-        Imprimir[1] = MensajeCifrado;
-        return Imprimir;
+    public ArrayList<String> ConvertirAscii(ArrayList<String> caracteres)
+    {
+        ArrayList<String> nuevo = new ArrayList<String>();
 
+        for(String s: caracteres)
+        {
+            String tempo = ConvertirMensaje(s);
+            nuevo.add(tempo);
+
+        }
+        return nuevo;
     }
 
-    private void calcularD() {
+    public String ConvertirMensaje(String letra)
+    {
+        String mensaje ="";
+        ArrayList<String> Key= new ArrayList<String>();
+        ArrayList<String> Value= new ArrayList<String>();
+        for(int i=0;i<256;i++)
+        {
+            Key.add(i+"");
+            Value.add(""+(char)i);
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if(Value.get(i).equals(letra))
+            {
+                mensaje+= Key.get(i);
+            }
+        }
+        return mensaje;
+    }
+
+    public String[] LlavePublica(String llave)
+    {
+        String n = llave.substring(1, llave.length()-1);
+        String[] tempo = n.split(",");
+        return tempo;
+    }
+
+    public String GenerarLlavePublica(String p,String q,String e)
+    {
+        String llavePublica="";
+        int N = Integer.parseInt(p)*Integer.parseInt(q);
+        llavePublica ="("+N+","+e+")";
+        return llavePublica;
+    }
+
+    public String GenerarLlavePrivada(String p,String q,String e)
+    {
+        String llavePrivada="";
+        int N = Integer.parseInt(p)*Integer.parseInt(q);
+        int Delta = (Integer.parseInt(p)-1)*(Integer.parseInt(q)-1);
+        BigInteger E = new BigInteger(e);
+        BigInteger R = new BigInteger(Integer.toString(Delta));
+        BigInteger d = calcularD(E,R);
+        llavePrivada ="("+N+","+d+")";
+        return llavePrivada;
+    }
+
+    public BigInteger calcularD(BigInteger valorE, BigInteger valorR)
+    {
+        BigInteger valorD;
         valorD = valorE.modInverse(valorR);
+        return valorD;
     }
-
-    private void calcularQ() {
-        List<BigInteger> pqList = rsa.calcularQ(valorN);
-        valorP = pqList.get(0);
-        valorQ = pqList.get(1);
-    }
-
 
 }
-
-

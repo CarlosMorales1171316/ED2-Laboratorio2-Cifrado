@@ -46,7 +46,6 @@ public class DescifrarRSAVista extends AppCompatActivity {
         Ruta = (Button) findViewById(R.id.Boton_RutaCifrarRSA1);
         Regresar = (Button) findViewById(R.id.Boton_Regresar);
         Escogerkey1 = (Button) findViewById(R.id.Boton_EscojerLlavePrivada1);
-        Escogerkey2 = (Button) findViewById(R.id.Boton_EscojerLlavePublica2);
         Descifrar = (Button) findViewById(R.id.Boton_DescifrarRSA);
         MostrarLlaves = (TextView) findViewById(R.id.Txt_MostrarCifradoRSA1);
 
@@ -78,16 +77,6 @@ public class DescifrarRSAVista extends AppCompatActivity {
             {
                 MostrarLlaves.setText("");
                 opcion=2;
-                performFileSearch();
-            }
-        });
-        Escogerkey2.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                MostrarLlaves.setText("");
-                opcion=3;
                 performFileSearch();
             }
         });
@@ -167,7 +156,7 @@ public class DescifrarRSAVista extends AppCompatActivity {
                 //region Obtener llave privada
                 if(opcion ==2)
                 {
-                    if(path.endsWith(".key")) {
+                    if(path.endsWith("private.key")) {
                         ArrayList<String> Escribir = new ArrayList<>();
                         ArrayList<String> Escribir2 = new ArrayList<>();
                         AlgortimoSDES s = new AlgortimoSDES(1);
@@ -199,85 +188,46 @@ public class DescifrarRSAVista extends AppCompatActivity {
                     }
                 }
                 //endregion
-                //region llave publica
-                if(opcion==3)
-                {
-                    if (path.endsWith(".key")) {
-                        ArrayList<String> Escribir = new ArrayList<>();
-                        ArrayList<String> Escribir2 = new ArrayList<>();
-                        AlgortimoSDES s = new AlgortimoSDES(1);
-                        String ruta1 = s.Leer();
-                        Escribir = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
-                        if(Escribir.size() <2||Escribir.size()>2)
-                        {
-                            MostrarLlaves.setText("Debe de ingresar llave privada");
-                        }
-                        if (ruta1.length() > 0 && Escribir.size() ==2)
-                        {
-                            String ruta2 = "/storage/emulated/0/" + path;
-                            Escribir2 = LeerArchivos(new File(ruta2));
-                            for (String d : Escribir2) {
-                                Escribir.add(d);
-                            }
-                            MostrarLlaves.setText("Llave publica " + Escribir2.get(0));
-                            EscribirArchivo(Escribir, "/storage/emulated/0/Download/RutaArchivo.txt");
-                        }
-                        if (ruta1.length() == 0) {
-                            MostrarLlaves.setText("Debe de ingresar una ruta de almacenamiento");
-                        }
-                    } else {
-
-                        MostrarLlaves.setText("");
-                        MostrarLlaves.setText("Archivo no compatible");
-                    }
-                }
-                //endregion
                 //region Descifrado
                 if(opcion==1) {
-                    if (path.endsWith("rsacif")) {
-                        AlgortimoSDES s = new AlgortimoSDES(1);
-                        ArrayList<String> Cifrado = new ArrayList<>();
-                        ArrayList<String> Leer = new ArrayList<>();
-                        Cifrado = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
-                        String ruta2 = "/storage/emulated/0/" + path;
-                        Leer = LeerArchivos(new File(ruta2));
-                        if (Leer.size() > 0&&Cifrado.size()>0) {
-                            String ruta = Cifrado.get(0);
-                            String m = Leer.get(0);
-                            String llave1 = Cifrado.get(1);
-                            String llave2 = Cifrado.get(2);
-                            String llavePrivada = llave1.substring(1, llave1.length() - 1);
-                            String llavePublica = llave2.substring(1, llave2.length() - 1);
-                            String[] tempo = llavePrivada.split(",");
-                            String[] tempo2 = llavePublica.split(",");
-                            int E = Integer.parseInt(tempo2[1]);
-                            int N = Integer.parseInt(tempo[0]);
-                            BigInteger n = new BigInteger(Integer.toString(N));
-                            BigInteger e = new BigInteger(Integer.toString(E));
+                    try {
+                        if (path.endsWith("rsacif")) {
+                            AlgortimoSDES s = new AlgortimoSDES(1);
+                            ArrayList<String> Cifrado = new ArrayList<>();
+                            ArrayList<String> Leer = new ArrayList<>();
+                            Cifrado = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
+                            String ruta2 = "/storage/emulated/0/" + path;
+                            Leer = LeerArchivos(new File(ruta2));
+                            if (Leer.size() > 0 && Cifrado.size() > 0) {
+                                String ruta = Cifrado.get(0);
+                                String m = Leer.get(0);
+                                DescifradoRSA descifradoRSA = new DescifradoRSA();
+                                String llave = Cifrado.get(1);
+                                String Descifrado = descifradoRSA.DescifrarMensaje(llave, m);
+                                String name = ("/storage/emulated/0/" + path);
+                                String[] d = name.split("/");
+                                String name2 = d[5].substring(0, d[5].length() - 7);
+                                String rutaSalida = ruta + name2 + "Des.txt";
+                                MostrarLlaves.setText("\nMensaje descifrado: \n" + Descifrado + "\nRuta archivo: " + rutaSalida);
+                                Leer.clear();
+                                Leer.add(Descifrado);
+                                EscribirArchivo(Leer, rutaSalida);
+                                Borrar();
+                            }
+                            if (Cifrado.size() == 0) {
+                                MostrarLlaves.setText("");
+                                MostrarLlaves.setText("Debe de ingresar ruta de almacenamiento");
 
-                            DescifradoRSA decoder = new DescifradoRSA(n, e, m);
-                            String[] Descifrado = decoder.Descifrar();
-                            String name = ("/storage/emulated/0/" + path);
-                            String[] d = name.split("/");
-                            String name2 = d[5].substring(0, d[5].length() - 7);
-                            String rutaSalida = ruta + name2 + "Des.txt";
-                            MostrarLlaves.setText(Descifrado[0] + "\nRuta archivo: " + rutaSalida);
-                            Leer.clear();
-                            Leer.add(Descifrado[1]);
-                            EscribirArchivo(Leer, rutaSalida);
-                            Borrar();
-                        }
-                        if(Cifrado.size()==0)
-                        {
+                            }
+                        } else {
                             MostrarLlaves.setText("");
-                            MostrarLlaves.setText("Debe de ingresar ruta de almacenamiento");
-
+                            MostrarLlaves.setText("Archivo no compatible");
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
                         MostrarLlaves.setText("");
-                        MostrarLlaves.setText("Archivo no compatible");
+                        MostrarLlaves.setText("Debe de llenar todos los campos para poder descifrar un mensaje");
                     }
                 }
                 //endregion

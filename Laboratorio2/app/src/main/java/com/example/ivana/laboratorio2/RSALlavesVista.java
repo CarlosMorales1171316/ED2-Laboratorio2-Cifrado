@@ -76,61 +76,66 @@ public class RSALlavesVista extends AppCompatActivity {
         GenerarLlaves.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
-                MostrarLlaves.setText("");
-                String PA = P.getText().toString();
-                String QA = Q.getText().toString();
-                String EA = E.getText().toString();
-                int p = Integer.parseInt(PA);
-                int q = Integer.parseInt(QA);
-                int N = p*q;
-                int Delta =(p-1)*(q-1);
-                int en =Integer.parseInt(EA);
-                boolean Condicion= ePrimo(p);
-                boolean Condicion2= ePrimo(q);
-                int mcd = obtener_mcd(en,Delta);
-                AlgortimoSDES s = new AlgortimoSDES(1);
-                String ruta = s.Leer();
-                if(mcd==1&&Condicion==true && Condicion2==true && q>p&&ruta.length()>0)
-                {
-                    BigInteger ef = new BigInteger(Integer.toString(en));
-                    BigInteger R = new BigInteger(Integer.toString(Delta));
-                    BigInteger d = calcularD(ef,R);
-                    String rutaLlavePrivada = ruta+"private.key";
-                    String llavePrivada ="("+N+","+d+")";
-                    s.CrearArchivo(rutaLlavePrivada,llavePrivada,"");
+            public void onClick(View v) {
+                try {
+                    MostrarLlaves.setText("");
+                    String PA = P.getText().toString();
+                    String QA = Q.getText().toString();
+                    String EA = E.getText().toString();
+                    int p = Integer.parseInt(PA);
+                    int q = Integer.parseInt(QA);
+                    int N = p * q;
+                    int Delta = (p - 1) * (q - 1);
+                    int en = Integer.parseInt(EA);
+                    boolean Condicion = ePrimo(p);
+                    boolean Condicion2 = ePrimo(q);
+                    int mcd = obtener_mcd(en, Delta);
+                    AlgortimoSDES s = new AlgortimoSDES(1);
+                    String ruta = s.Leer();
+                    if (PA.length() == 0 || QA.length() == 0 || EA.length() == 0) {
+                        MostrarLlaves.setText("Debe de llenar todos los campos");
+                    }
+                    if (mcd == 1 && Condicion == true && Condicion2 == true && q > p && ruta.length() > 0 && PA.length() > 0 && QA.length() > 0 && EA.length() > 0) {
+                        String rutaLlavePrivada = ruta + "private.key";
+                        CifradoRSA des = new CifradoRSA();
+                        String llavePrivada = des.GenerarLlavePrivada(PA, QA, EA);
+                        String llavePublica = des.GenerarLlavePublica(PA, QA, EA);
+                        s.CrearArchivo(rutaLlavePrivada, llavePrivada, "");
+                        String rutaLLavePublica = ruta + "public.key";
+                        s.CrearArchivo(rutaLLavePublica, llavePublica, "");
+                        String mensaje = "\nLlave privada: " + llavePrivada + "\n" + "\nRuta llave privada: " + rutaLlavePrivada + "\n" + "\nLlave publica: " + llavePublica + "\n" + "\nRuta llave publica: " + rutaLLavePublica;
+                        MostrarLlaves.setText(mensaje);
+                    }
+                    if (mcd > 1) {
+                        MostrarLlaves.setText("E invalido, ingrese uno nuevamente");
+                        E.setText("");
+                    }
+                    if (Condicion == false) {
+                        MostrarLlaves.setText("p debe de ser primo ingrese nuevamente");
+                        P.setText("");
+                    }
+                    if (Condicion2 == false) {
+                        MostrarLlaves.setText("q debe de ser primo ingrese nuevamente");
+                        Q.setText("");
+                    }
+                    if (q < p) {
+                        MostrarLlaves.setText("q debe de ser mayor a p");
+                        Q.setText("");
+                        P.setText("");
+                    }
+                    if (ruta.length() == 0) {
+                        MostrarLlaves.setText("Debe de ingresar una ruta de almacenamiento");
+                    }
 
-                    String llavePublica = "("+N+","+en+")";
-                    String rutaLLavePublica=ruta+"public.key";
-                    s.CrearArchivo(rutaLLavePublica,llavePublica,"");
-                    String mensaje ="\nLlave privada: " +llavePrivada+"\n"+"\nRuta llave privada: "+rutaLlavePrivada +"\n"+"\nLlave publica: "+llavePublica+"\n"+ "\nRuta llave publica: "+rutaLLavePublica;
-                    MostrarLlaves.setText(mensaje);
                 }
-                if(mcd>1)
+                catch (Exception d)
                 {
-                    MostrarLlaves.setText("E invalido, ingrese uno nuevamente");
+                    MostrarLlaves.setText("");
+                    MostrarLlaves.setText("Ha ocurrido un error en el ingreso de datos, pruebe nuevamente por favor");
                     E.setText("");
-                }
-                if(Condicion==false)
-                {
-                    MostrarLlaves.setText("p debe de ser prima ingrese nuevamente");
-                    P.setText("");
-                }
-                if(Condicion2==false)
-                {
-                    MostrarLlaves.setText("q debe de ser prima ingrese nuevamente");
-                    Q.setText("");
-                }
-                if(q<p)
-                {
-                    MostrarLlaves.setText("q debe de ser mayor a p");
                     Q.setText("");
                     P.setText("");
-                }
-                if(ruta.length()==0)
-                {
-                    MostrarLlaves.setText("Debe de ingresar una ruta de almacenamiento");
+
                 }
             }
         });

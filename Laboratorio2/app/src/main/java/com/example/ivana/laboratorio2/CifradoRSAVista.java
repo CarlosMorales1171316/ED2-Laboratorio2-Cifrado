@@ -47,10 +47,9 @@ public class CifradoRSAVista extends AppCompatActivity {
         setContentView(R.layout.activity_cifrado_rsavista);
         Cifrar = (Button) findViewById(R.id.Boton_CifrarRSA);
         Ruta = (Button) findViewById(R.id.Boton_RutaCifrarRSA);
-        Escogerkey1 = (Button) findViewById(R.id.Boton_EscojerLlavePrivada);
-        Escogerkey2 = (Button) findViewById(R.id.Boton_EscojerLlavePublica);
         Descifrar = (Button) findViewById(R.id.Boton_DescifrarVista);
         MostrarLlaves = (TextView) findViewById(R.id.Txt_MostrarCifradoRSA);
+        Escogerkey1 = (Button) findViewById(R.id.Boton_EscojerLlavePublica);
 
         Descifrar.setOnClickListener(new View.OnClickListener()
         {
@@ -83,17 +82,6 @@ public class CifradoRSAVista extends AppCompatActivity {
                 performFileSearch();
             }
         });
-        Escogerkey2.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                MostrarLlaves.setText("");
-                opcion=3;
-                performFileSearch();
-            }
-        });
-
         Cifrar.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -167,10 +155,10 @@ public class CifradoRSAVista extends AppCompatActivity {
                     MostrarLlaves.setText("Ruta de almacenamiento de archivo cifrado: "+actual);
                 }
                 //endregion
-                //region Obtener llave privada
+                //region Obtener llave publica
                 if(opcion ==2)
                 {
-                 if(path.endsWith(".key")) {
+                 if(path.endsWith("public.key")) {
                      ArrayList<String> Escribir = new ArrayList<>();
                      ArrayList<String> Escribir2 = new ArrayList<>();
                      AlgortimoSDES s = new AlgortimoSDES(1);
@@ -188,7 +176,7 @@ public class CifradoRSAVista extends AppCompatActivity {
                          for (String d : Escribir2) {
                              Escribir.add(d);
                          }
-                         MostrarLlaves.setText("Llave privada " + Escribir2.get(0));
+                         MostrarLlaves.setText("Llave publica " + Escribir2.get(0));
                          EscribirArchivo(Escribir, "/storage/emulated/0/Download/RutaArchivo.txt");
                      }
                      if (ruta1.length() == 0) {
@@ -202,78 +190,40 @@ public class CifradoRSAVista extends AppCompatActivity {
                  }
                 }
                 //endregion
-                //region llave publica
-                if(opcion==3)
-                {
-                    if (path.endsWith(".key")) {
-                        ArrayList<String> Escribir = new ArrayList<>();
-                        ArrayList<String> Escribir2 = new ArrayList<>();
-                        AlgortimoSDES s = new AlgortimoSDES(1);
-                        String ruta1 = s.Leer();
-                        Escribir = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
-                        if(Escribir.size() <2||Escribir.size()>2)
-                        {
-                            MostrarLlaves.setText("Debe de ingresar llave privada");
-                        }
-                        if (ruta1.length() > 0 && Escribir.size() ==2)
-                        {
-                            String ruta2 = "/storage/emulated/0/" + path;
-                            Escribir2 = LeerArchivos(new File(ruta2));
-                            for (String d : Escribir2) {
-                                Escribir.add(d);
-                            }
-                            MostrarLlaves.setText("Llave publica " + Escribir2.get(0));
-                            EscribirArchivo(Escribir, "/storage/emulated/0/Download/RutaArchivo.txt");
-                        }
-                        if (ruta1.length() == 0) {
-                            MostrarLlaves.setText("Debe de ingresar una ruta de almacenamiento");
-                        }
-                    } else {
-
-                        MostrarLlaves.setText("");
-                        MostrarLlaves.setText("Archivo no compatible");
-                    }
-                }
-                //endregion
                 //region Cifrar
-                if(opcion==1)
-                {
-                    AlgortimoSDES s = new AlgortimoSDES(1);
-                    ArrayList<String> Cifrado = new ArrayList<>();
-                    ArrayList<String> Leer = new ArrayList<>();
-                    Cifrado = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
-                    String ruta2 = "/storage/emulated/0/" + path;
-                    Leer = LeerArchivos(new File(ruta2));
-                    if (Leer.size() > 0&& Cifrado.size()>0) {
-                        String ruta = Cifrado.get(0);
-                        String m = Leer.get(0);
-                        String llave1 = Cifrado.get(1);
-                        String llave2 = Cifrado.get(2);
-                        String llavePrivada = llave1.substring(1, llave1.length() - 1);
-                        String llavePublica = llave2.substring(1, llave2.length() - 1);
-                        String[] tempo = llavePrivada.split(",");
-                        String[] tempo2 = llavePublica.split(",");
-                        int E = Integer.parseInt(tempo2[1]);
-                        int N = Integer.parseInt(tempo[0]);
-                        BigInteger n = new BigInteger(Integer.toString(N));
-                        BigInteger e = new BigInteger(Integer.toString(E));
+                if(opcion==1) {
+                    try {
+                        AlgortimoSDES s = new AlgortimoSDES(1);
+                        ArrayList<String> Cifrado = new ArrayList<>();
+                        ArrayList<String> Leer = new ArrayList<>();
+                        Cifrado = LeerArchivos(new File("/storage/emulated/0/Download/RutaArchivo.txt"));
+                        String ruta2 = "/storage/emulated/0/" + path;
+                        Leer = LeerArchivos(new File(ruta2));
+                        if (Leer.size() > 0 && Cifrado.size() > 0) {
+                            String ruta = Cifrado.get(0);
+                            String m = Leer.get(0);
+                            CifradoRSA cifrar = new CifradoRSA();
+                            String llave1 = Cifrado.get(1);
+                            String cifrado = cifrar.CifrarMensaje(llave1, m);
+                            String name = ("/storage/emulated/0/" + path);
+                            String[] d = name.split("/");
+                            String name2 = d[5].substring(0, d[5].length() - 4);
+                            String rutaSalida = ruta + name2 + ".rsacif";
+                            MostrarLlaves.setText("Mensaje Cifrado: \n" + cifrado + "\nRuta archivo: " + rutaSalida);
+                            Leer.clear();
+                            Leer.add(cifrado);
+                            EscribirArchivo(Leer, rutaSalida);
+                        }
+                        if (Cifrado.size() == 0) {
+                            MostrarLlaves.setText("");
+                            MostrarLlaves.setText("Debe de ingresar ruta de almacenamiento");
 
-                        CifradoRSA encoder = new CifradoRSA(n, e, m);
-                        String[] cifrado = encoder.cifrar();
-                        String name= ("/storage/emulated/0/"+path);
-                        String[] d = name.split("/");
-                        String name2 = d[5].substring(0,d[5].length()-4);
-                        String rutaSalida = ruta +name2+".rsacif";
-                        MostrarLlaves.setText(cifrado[0]+"\nRuta archivo: "+ rutaSalida);
-                        Leer.clear();
-                        Leer.add(cifrado[1]);
-                        EscribirArchivo(Leer,rutaSalida);
+                        }
                     }
-                    if(Cifrado.size()==0)
+                    catch (Exception e)
                     {
                         MostrarLlaves.setText("");
-                        MostrarLlaves.setText("Debe de ingresar ruta de almacenamiento");
-
+                        MostrarLlaves.setText("Debe de ingresar todos los campos para poder cifrar");
                     }
                 }
                 //endregion

@@ -30,16 +30,6 @@
         android:layout_width="5dp"
         android:layout_height="5dp" />
     <Button
-        android:id="@+id/Boton_EscojerLlavePublica2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Escojer Llave Publica" />
-    <TextView
-        android:layout_width="5dp"
-        android:layout_height="5dp" />
-    <Button
         android:id="@+id/Boton_DescifrarRSA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
