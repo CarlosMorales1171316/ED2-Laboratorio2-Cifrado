@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e23030"
+    tools:context=".DescifrarRSAVista">
+
+    <Button
+        android:id="@+id/Boton_RutaCifrarRSA1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:text="Escoja ruta de almacenamiento de archivo"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/Boton_EscojerLlavePrivada1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Escojer Llave Privada" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/Boton_EscojerLlavePublica2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Escojer Llave Publica" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/Boton_DescifrarRSA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Descifrar archivo de rsacif" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+    <TextView
+        android:id="@+id/Txt_MostrarCifradoRSA1"
+        android:layout_width="match_parent"
+        android:layout_height="219dp"
+        android:layout_below="@+id/Boton_OpenFile"
+        android:layout_centerHorizontal="true"
+        android:background="#00ccb8"
+        android:textSize="15dp"
+        android:padding="10dp" />
+    <TextView
+        android:layout_width="5dp"
+        android:layout_height="5dp" />
+
+    <Button
+        android:id="@+id/Boton_Regresar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Regresar Inicio" />
+
+
+</LinearLayout>
